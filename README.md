@@ -1,36 +1,146 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gachimatsu
 
-## Getting Started
+[Next.js](https://nextjs.org) 15.3.5 と React 19 を使用したWebアプリケーションです。
 
-First, run the development server:
+## 技術スタック
+
+- **フレームワーク**: Next.js 15.3.5 (App Router)
+- **言語**: TypeScript
+- **スタイリング**: Tailwind CSS v4
+- **リンティング**: ESLint
+- **パッケージマネージャー**: npm
+
+## 必要な環境
+
+- Node.js 18.0.0 以上
+- npm 9.0.0 以上
+
+## セットアップ
+
+### 1. リポジトリのクローン
+
+```bash
+git clone <repository-url>
+cd gachimatsu
+```
+
+### 2. 依存関係のインストール
+
+```bash
+npm install
+```
+
+## 開発環境の起動
+
+### 基本的な起動方法
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+このコマンドで以下が実行されます：
+- Next.js開発サーバーが起動（Turbopack使用で高速）
+- http://localhost:3000 でアプリケーションにアクセス可能
+- ファイル変更時の自動リロード
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 起動確認
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. ターミナルで以下のメッセージが表示されることを確認：
+```
+▲ Next.js 15.3.5 (Turbopack)
+- Local:        http://localhost:3000
+- Network:      http://192.168.x.x:3000
+✓ Ready in xxxms
+```
 
-## Learn More
+2. ブラウザで http://localhost:3000 にアクセス
+3. Next.jsのウェルカムページが表示されれば成功
 
-To learn more about Next.js, take a look at the following resources:
+### トラブルシューティング
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### ポートが使用中の場合
+```bash
+# 別のポートで起動
+npm run dev -- -p 3001
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+#### キャッシュをクリアして起動
+```bash
+# .nextディレクトリを削除
+rm -rf .next
+npm run dev
+```
 
-## Deploy on Vercel
+#### 依存関係の問題
+```bash
+# node_modulesを再インストール
+rm -rf node_modules package-lock.json
+npm install
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 利用可能なコマンド
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| コマンド | 説明 |
+|---------|------|
+| `npm run dev` | 開発サーバー起動（Turbopack付き） |
+| `npm run build` | 本番用ビルド |
+| `npm run start` | 本番サーバー起動 |
+| `npm run lint` | ESLintによるコードチェック |
+
+## 開発ワークフロー
+
+### 1. 開発開始
+```bash
+npm run dev
+```
+
+### 2. コード編集
+- `src/app/page.tsx` - メインページ
+- `src/app/layout.tsx` - ルートレイアウト  
+- `src/app/globals.css` - グローバルスタイル
+
+### 3. コードチェック
+```bash
+npm run lint
+```
+
+### 4. 本番ビルドテスト
+```bash
+npm run build
+npm run start
+```
+
+## プロジェクト構造
+
+```
+gachimatsu/
+├── src/
+│   └── app/
+│       ├── page.tsx        # メインページ
+│       ├── layout.tsx      # ルートレイアウト
+│       ├── globals.css     # グローバルスタイル
+│       ├── history/        # 履歴機能
+│       └── record/         # 記録機能
+├── public/                 # 静的ファイル
+├── components/             # 再利用可能コンポーネント
+├── hooks/                  # カスタムフック
+├── lib/                    # ユーティリティ関数
+├── package.json           # 依存関係とスクリプト
+├── tsconfig.json          # TypeScript設定
+├── next.config.ts         # Next.js設定
+└── tailwind.config.ts     # Tailwind CSS設定
+```
+
+## 開発Tips
+
+- **Turbopack**: 高速バンドラーが有効になっているため、開発時のビルドが高速です
+- **自動型チェック**: TypeScriptの型エラーはブラウザとターミナルの両方で表示されます
+- **Hot Reload**: ファイル保存時に自動でページが更新されます
+- **Tailwind CSS**: ユーティリティファーストのCSSフレームワークが設定済みです
+
+## サポート
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [React Documentation](https://react.dev/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
