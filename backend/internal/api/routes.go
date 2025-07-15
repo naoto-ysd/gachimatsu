@@ -1,0 +1,14 @@
+package api
+
+import (
+	"gachimatsu-backend/internal/handlers"
+
+	"github.com/gorilla/mux"
+)
+
+// SetupRoutes APIルートを設定
+func SetupRoutes(router *mux.Router) {
+	// メニュー関連のエンドポイント
+	router.HandleFunc("/menus", handlers.GetMenus).Methods("GET")
+	router.HandleFunc("/menus/{id}", handlers.GetMenu).Methods("GET")
+} 
