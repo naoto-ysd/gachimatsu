@@ -24,6 +24,31 @@
 /backend/vendor/
 /backend/tmp/
 
+# Go build outputs
+/backend/bin/
+/backend/*.exe
+/backend/*.exe~
+/backend/server
+/backend/main
+
+# Go test and coverage files
+/backend/*.out
+/backend/coverage.txt
+/backend/coverage.html
+/backend/c.out
+
+# Go local configuration
+/backend/config.local.json
+/backend/config.local.yaml
+/backend/config.local.yml
+
+# Go logs
+/backend/logs/
+/backend/*.log
+
+# Go air (hot reload) files
+/backend/.air.toml
+
 # Misc
 .DS_Store
 *.pem
