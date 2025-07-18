@@ -1,0 +1,626 @@
+---
+alwaysApply: true
+---
+
+# Next.js フロントエンド コーディングルール
+
+## 命名規則
+
+### 1. 変数名
+- **camelCase** を使用
+- 意味のある名前を付ける
+- boolean変数は `is`, `has`, `can`, `should` などのプレフィックスを使用
+
+```typescript
+// ✅ 良い例
+const userName = 'John';
+const isLoading = false;
+const hasPermission = true;
+const canEdit = false;
+
+// ❌ 悪い例
+const user_name = 'John';
+const loading = false;
+const permission = true;
+```
+
+### 2. 関数名
+- **camelCase** を使用
+- 動詞で始める
+- 何をするかが明確になる名前を付ける
+
+```typescript
+// ✅ 良い例
+const getUserData = () => {};
+const handleSubmit = () => {};
+const validateEmail = () => {};
+const fetchUserProfile = async () => {};
+
+// ❌ 悪い例
+const userData = () => {};
+const submit = () => {};
+const email = () => {};
+```
+
+### 3. Reactコンポーネント名
+- **PascalCase** を使用
+- 名詞で命名
+- 単数形を使用
+
+```typescript
+// ✅ 良い例
+const UserProfile = () => {};
+const NavigationMenu = () => {};
+const ProductCard = () => {};
+
+// ❌ 悪い例
+const userProfile = () => {};
+const navigationMenu = () => {};
+const ProductCards = () => {};
+```
+
+### 4. インターフェース・型名
+- **PascalCase** を使用
+- Iプレフィックスは使用しない（TypeScript推奨）
+- 意味のある名前を付ける
+
+```typescript
+// ✅ 良い例
+interface User {
+  id: string;
+  name: string;
+}
+
+type ApiResponse<T> = {
+  data: T;
+  success: boolean;
+};
+
+// ❌ 悪い例
+interface IUser {
+  id: string;
+  name: string;
+}
+
+interface user {
+  id: string;
+  name: string;
+}
+```
+
+### 5. プロパティ名
+- **camelCase** を使用
+- 省略形は避ける
+
+```typescript
+// ✅ 良い例
+interface UserProps {
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
+  isActive: boolean;
+}
+
+// ❌ 悪い例
+interface UserProps {
+  first_name: string;
+  fname: string;
+  email_addr: string;
+  active: boolean;
+}
+```
+
+### 6. 定数
+- **SCREAMING_SNAKE_CASE** を使用
+- ファイルの上部で定義
+
+```typescript
+// ✅ 良い例
+const API_BASE_URL = 'https://api.example.com';
+const MAX_RETRY_COUNT = 3;
+const DEFAULT_PAGE_SIZE = 10;
+
+// ❌ 悪い例
+const apiBaseUrl = 'https://api.example.com';
+const maxRetryCount = 3;
+```
+
+### 7. Enum
+- **PascalCase** を使用
+- 値も PascalCase または SCREAMING_SNAKE_CASE
+
+```typescript
+// ✅ 良い例
+enum UserRole {
+  Admin = 'ADMIN',
+  User = 'USER',
+  Guest = 'GUEST',
+}
+
+enum HttpStatus {
+  Ok = 200,
+  NotFound = 404,
+  InternalServerError = 500,
+}
+
+// ❌ 悪い例
+enum userRole {
+  admin = 'admin',
+  user = 'user',
+}
+```
+
+### 8. ファイル・フォルダ名
+- **kebab-case** を基本とする
+- Reactコンポーネントファイルは **PascalCase.tsx**
+- ページコンポーネントは **page.tsx**
+- フォルダ名は **kebab-case**
+
+```
+// ✅ 良い例
+components/
+  UserProfile.tsx
+  navigation-menu/
+    NavigationMenu.tsx
+    navigation-menu.module.css
+app/
+  user-settings/
+    page.tsx
+utils/
+  api-client.ts
+  date-helpers.ts
+
+// ❌ 悪い例
+components/
+  userProfile.tsx
+  NavigationMenu/
+    navigation_menu.tsx
+```
+
+## コーディング規則
+
+### 1. インポート順序
+```typescript
+// 1. React関連
+import React from 'react';
+import { useState, useEffect } from 'react';
+
+// 2. 外部ライブラリ
+import { clsx } from 'clsx';
+import { format } from 'date-fns';
+
+// 3. 内部ライブラリ（aliasパス）
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/use-auth';
+
+// 4. 相対パス
+import './component.css';
+import { helper } from '../utils/helper';
+```
+
+### 2. 型定義
+- propsの型は `ComponentProps` の形で命名
+- 複雑な型は別ファイルに分離
+
+```typescript
+// ✅ 良い例
+interface UserCardProps {
+  user: User;
+  onEdit: (id: string) => void;
+  className?: string;
+}
+
+const UserCard: React.FC<UserCardProps> = ({ user, onEdit, className }) => {
+  // コンポーネントの実装
+};
+```
+
+### 3. カスタムフック
+- `use` プレフィックスを使用
+- 戻り値は object で返す
+
+```typescript
+// ✅ 良い例
+const useUserData = (userId: string) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  return {
+    user,
+    isLoading,
+    refetch: () => {},
+  };
+};
+```
+
+### 4. ディレクトリ構造
+```
+app/
+  (auth)/
+    login/
+      page.tsx
+  dashboard/
+    page.tsx
+components/
+  ui/           # 基本UIコンポーネント
+  forms/        # フォーム関連
+  layout/       # レイアウト関連
+hooks/
+  use-auth.ts
+  use-api.ts
+lib/
+  utils.ts
+  validations.ts
+types/
+  user.ts
+  api.ts
+```
+
+### 5. CSS/スタイル
+- Tailwind CSS クラス名は読みやすく整理
+- カスタムCSSクラス名は kebab-case
+
+```typescript
+// ✅ 良い例
+<div className="flex items-center justify-between p-4 bg-white rounded-lg shadow-md">
+  <h2 className="text-lg font-semibold text-gray-900">Title</h2>
+</div>
+
+// CSS Modules
+<div className={styles['user-card']}>
+```
+
+### 6. エラーハンドリング
+- try-catch を適切に使用
+- エラーメッセージは具体的に
+
+```typescript
+// ✅ 良い例
+try {
+  const userData = await fetchUser(userId);
+  setUser(userData);
+} catch (error) {
+  console.error('Failed to fetch user data:', error);
+  toast.error('ユーザー情報の取得に失敗しました');
+}
+```
+
+### 7. 環境変数
+- `NEXT_PUBLIC_` プレフィックスでクライアントサイド変数を定義
+- SCREAMING_SNAKE_CASE で命名
+
+```typescript
+// .env.local
+NEXT_PUBLIC_API_BASE_URL=https://api.example.com
+DATABASE_URL=postgresql://...
+```
+
+### 8. コメント
+- 複雑なロジックには日本語でコメント
+- JSDocを適切に使用
+
+```typescript
+/**
+ * ユーザー情報を取得して表示するコンポーネント
+ * @param userId - 取得するユーザーのID
+ * @param onUserUpdate - ユーザー情報更新時のコールバック
+ */
+const UserProfile: React.FC<UserProfileProps> = ({ userId, onUserUpdate }) => {
+  // 複雑な計算処理の説明
+  const calculatedValue = useMemo(() => {
+    // ここで複雑な計算を行う
+    return complexCalculation(data);
+  }, [data]);
+};
+```
+# Next.js フロントエンド コーディングルール
+
+## 命名規則
+
+### 1. 変数名
+- **camelCase** を使用
+- 意味のある名前を付ける
+- boolean変数は `is`, `has`, `can`, `should` などのプレフィックスを使用
+
+```typescript
+// ✅ 良い例
+const userName = 'John';
+const isLoading = false;
+const hasPermission = true;
+const canEdit = false;
+
+// ❌ 悪い例
+const user_name = 'John';
+const loading = false;
+const permission = true;
+```
+
+### 2. 関数名
+- **camelCase** を使用
+- 動詞で始める
+- 何をするかが明確になる名前を付ける
+
+```typescript
+// ✅ 良い例
+const getUserData = () => {};
+const handleSubmit = () => {};
+const validateEmail = () => {};
+const fetchUserProfile = async () => {};
+
+// ❌ 悪い例
+const userData = () => {};
+const submit = () => {};
+const email = () => {};
+```
+
+### 3. Reactコンポーネント名
+- **PascalCase** を使用
+- 名詞で命名
+- 単数形を使用
+
+```typescript
+// ✅ 良い例
+const UserProfile = () => {};
+const NavigationMenu = () => {};
+const ProductCard = () => {};
+
+// ❌ 悪い例
+const userProfile = () => {};
+const navigationMenu = () => {};
+const ProductCards = () => {};
+```
+
+### 4. インターフェース・型名
+- **PascalCase** を使用
+- Iプレフィックスは使用しない（TypeScript推奨）
+- 意味のある名前を付ける
+
+```typescript
+// ✅ 良い例
+interface User {
+  id: string;
+  name: string;
+}
+
+type ApiResponse<T> = {
+  data: T;
+  success: boolean;
+};
+
+// ❌ 悪い例
+interface IUser {
+  id: string;
+  name: string;
+}
+
+interface user {
+  id: string;
+  name: string;
+}
+```
+
+### 5. プロパティ名
+- **camelCase** を使用
+- 省略形は避ける
+
+```typescript
+// ✅ 良い例
+interface UserProps {
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
+  isActive: boolean;
+}
+
+// ❌ 悪い例
+interface UserProps {
+  first_name: string;
+  fname: string;
+  email_addr: string;
+  active: boolean;
+}
+```
+
+### 6. 定数
+- **SCREAMING_SNAKE_CASE** を使用
+- ファイルの上部で定義
+
+```typescript
+// ✅ 良い例
+const API_BASE_URL = 'https://api.example.com';
+const MAX_RETRY_COUNT = 3;
+const DEFAULT_PAGE_SIZE = 10;
+
+// ❌ 悪い例
+const apiBaseUrl = 'https://api.example.com';
+const maxRetryCount = 3;
+```
+
+### 7. Enum
+- **PascalCase** を使用
+- 値も PascalCase または SCREAMING_SNAKE_CASE
+
+```typescript
+// ✅ 良い例
+enum UserRole {
+  Admin = 'ADMIN',
+  User = 'USER',
+  Guest = 'GUEST',
+}
+
+enum HttpStatus {
+  Ok = 200,
+  NotFound = 404,
+  InternalServerError = 500,
+}
+
+// ❌ 悪い例
+enum userRole {
+  admin = 'admin',
+  user = 'user',
+}
+```
+
+### 8. ファイル・フォルダ名
+- **kebab-case** を基本とする
+- Reactコンポーネントファイルは **PascalCase.tsx**
+- ページコンポーネントは **page.tsx**
+- フォルダ名は **kebab-case**
+
+```
+// ✅ 良い例
+components/
+  UserProfile.tsx
+  navigation-menu/
+    NavigationMenu.tsx
+    navigation-menu.module.css
+app/
+  user-settings/
+    page.tsx
+utils/
+  api-client.ts
+  date-helpers.ts
+
+// ❌ 悪い例
+components/
+  userProfile.tsx
+  NavigationMenu/
+    navigation_menu.tsx
+```
+
+## コーディング規則
+
+### 1. インポート順序
+```typescript
+// 1. React関連
+import React from 'react';
+import { useState, useEffect } from 'react';
+
+// 2. 外部ライブラリ
+import { clsx } from 'clsx';
+import { format } from 'date-fns';
+
+// 3. 内部ライブラリ（aliasパス）
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/use-auth';
+
+// 4. 相対パス
+import './component.css';
+import { helper } from '../utils/helper';
+```
+
+### 2. 型定義
+- propsの型は `ComponentProps` の形で命名
+- 複雑な型は別ファイルに分離
+
+```typescript
+// ✅ 良い例
+interface UserCardProps {
+  user: User;
+  onEdit: (id: string) => void;
+  className?: string;
+}
+
+const UserCard: React.FC<UserCardProps> = ({ user, onEdit, className }) => {
+  // コンポーネントの実装
+};
+```
+
+### 3. カスタムフック
+- `use` プレフィックスを使用
+- 戻り値は object で返す
+
+```typescript
+// ✅ 良い例
+const useUserData = (userId: string) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  return {
+    user,
+    isLoading,
+    refetch: () => {},
+  };
+};
+```
+
+### 4. ディレクトリ構造
+```
+app/
+  (auth)/
+    login/
+      page.tsx
+  dashboard/
+    page.tsx
+components/
+  ui/           # 基本UIコンポーネント
+  forms/        # フォーム関連
+  layout/       # レイアウト関連
+hooks/
+  use-auth.ts
+  use-api.ts
+lib/
+  utils.ts
+  validations.ts
+types/
+  user.ts
+  api.ts
+```
+
+### 5. CSS/スタイル
+- Tailwind CSS クラス名は読みやすく整理
+- カスタムCSSクラス名は kebab-case
+
+```typescript
+// ✅ 良い例
+<div className="flex items-center justify-between p-4 bg-white rounded-lg shadow-md">
+  <h2 className="text-lg font-semibold text-gray-900">Title</h2>
+</div>
+
+// CSS Modules
+<div className={styles['user-card']}>
+```
+
+### 6. エラーハンドリング
+- try-catch を適切に使用
+- エラーメッセージは具体的に
+
+```typescript
+// ✅ 良い例
+try {
+  const userData = await fetchUser(userId);
+  setUser(userData);
+} catch (error) {
+  console.error('Failed to fetch user data:', error);
+  toast.error('ユーザー情報の取得に失敗しました');
+}
+```
+
+### 7. 環境変数
+- `NEXT_PUBLIC_` プレフィックスでクライアントサイド変数を定義
+- SCREAMING_SNAKE_CASE で命名
+
+```typescript
+// .env.local
+NEXT_PUBLIC_API_BASE_URL=https://api.example.com
+DATABASE_URL=postgresql://...
+```
+
+### 8. コメント
+- 複雑なロジックには日本語でコメント
+- JSDocを適切に使用
+
+```typescript
+/**
+ * ユーザー情報を取得して表示するコンポーネント
+ * @param userId - 取得するユーザーのID
+ * @param onUserUpdate - ユーザー情報更新時のコールバック
+ */
+const UserProfile: React.FC<UserProfileProps> = ({ userId, onUserUpdate }) => {
+  // 複雑な計算処理の説明
+  const calculatedValue = useMemo(() => {
+    // ここで複雑な計算を行う
+    return complexCalculation(data);
+  }, [data]);
+};
+```
