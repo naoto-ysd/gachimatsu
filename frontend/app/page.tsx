@@ -36,16 +36,16 @@ const menuItems = [
   { id: 12, name: "カツカレー", price: 690, category: "curry", completed: false },
 ]
 
-interface MenuContentProps {
-  isDark: boolean
-  toggleTheme: () => void
-}
-
-function MenuContent({ isDark, toggleTheme }: MenuContentProps) {
+export default function MenuList() {
   const [activeCategory, setActiveCategory] = useState("all")
+  const [isDark, setIsDark] = useState(false)
 
   const filteredItems =
     activeCategory === "all" ? menuItems : menuItems.filter((item) => item.category === activeCategory)
+
+  const toggleTheme = () => {
+    setIsDark(!isDark)
+  }
 
   const handleMenuClick = (menuId: number) => {
     console.log(`Menu ${menuId} clicked - would navigate to detail page`)
@@ -154,14 +154,4 @@ function MenuContent({ isDark, toggleTheme }: MenuContentProps) {
       </main>
     </div>
   )
-}
-
-export default function MenuList() {
-  const [isDark, setIsDark] = useState(false)
-
-  const toggleTheme = () => {
-    setIsDark(!isDark)
-  }
-
-  return <MenuContent isDark={isDark} toggleTheme={toggleTheme} />
 }
