@@ -2,8 +2,7 @@
 
 import { Check } from "lucide-react"
 import Image from "next/image"
-import { useState } from "react"
-import { useContext } from "react"
+import { createContext, useState } from "react"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -11,6 +10,25 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+type ThemeContextType = {
+  theme: "light" | "dark"
+  setTheme: (theme: "light" | "dark") => void
+}
+
+export const themeContext = createContext<ThemeContextType>({
+  theme: "light",
+  setTheme: (theme: "light" | "dark") => {},
+})
+
+export function themeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useState<"light" | "dark">("light")
+  return (
+    <themeContext.Provider value={{ theme, setTheme }}>
+      <div className={`${theme === "dark" ? "dark" : ""}`}>{children}</div>
+    </themeContext.Provider>
+  )
+}
 
 const categories = [
   { id: "all", name: "すべて" },
