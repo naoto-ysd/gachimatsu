@@ -2,7 +2,7 @@
 
 import { Check } from "lucide-react"
 import Image from "next/image"
-import { createContext, useState } from "react"
+import { useState } from "react"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 const categories = [
   { id: "all", name: "すべて" },
@@ -35,7 +36,12 @@ const menuItems = [
   { id: 12, name: "カツカレー", price: 690, category: "curry", completed: false },
 ]
 
-export default function MenuList() {
+interface MenuContentProps {
+  isDark: boolean
+  toggleTheme: () => void
+}
+
+function MenuContent({ isDark, toggleTheme }: MenuContentProps) {
   const [activeCategory, setActiveCategory] = useState("all")
 
   const filteredItems =
@@ -52,14 +58,21 @@ export default function MenuList() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
+      <header className={`shadow-sm border-b border-gray-200 sticky top-0 z-10 transition-colors duration-300 ${
+        isDark ? 'bg-gray-800 border-gray-700' : 'bg-white'
+      }`}>
         <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-gray-900">ガチ松</h1>
-          <Button variant="ghost" size="icon" onClick={handleProfileClick} className="rounded-full hover:bg-orange-50">
-            <Avatar className="h-8 w-8">
-              <AvatarFallback className="bg-orange-100 text-orange-600 text-sm font-medium">U</AvatarFallback>
-            </Avatar>
-          </Button>
+          <h1 className={`text-xl font-bold transition-colors duration-300 ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>ガチ松</h1>
+          <div className="flex items-center gap-2">
+            <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
+            <Button variant="ghost" size="icon" onClick={handleProfileClick} className="rounded-full hover:bg-orange-50">
+              <Avatar className="h-8 w-8">
+                <AvatarFallback className="bg-orange-100 text-orange-600 text-sm font-medium">U</AvatarFallback>
+              </Avatar>
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -141,4 +154,14 @@ export default function MenuList() {
       </main>
     </div>
   )
+}
+
+export default function MenuList() {
+  const [isDark, setIsDark] = useState(false)
+
+  const toggleTheme = () => {
+    setIsDark(!isDark)
+  }
+
+  return <MenuContent isDark={isDark} toggleTheme={toggleTheme} />
 }
