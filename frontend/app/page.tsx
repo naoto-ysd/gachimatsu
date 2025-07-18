@@ -55,7 +55,7 @@ export default function MenuList() {
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-gray-900">松屋ログ</h1>
+          <h1 className="text-xl font-bold text-gray-900">ガチ松</h1>
           <Button variant="ghost" size="icon" onClick={handleProfileClick} className="rounded-full hover:bg-orange-50">
             <Avatar className="h-8 w-8">
               <AvatarFallback className="bg-orange-100 text-orange-600 text-sm font-medium">U</AvatarFallback>
