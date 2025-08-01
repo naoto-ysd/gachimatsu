@@ -1,0 +1,27 @@
+# Git関連
+.git
+.gitignore
+
+# ドキュメント
+*.md
+README.md
+MYSQL_SETUP.md
+
+# 一時ファイル
+*.tmp
+*.log
+
+# IDE設定
+.vscode
+.idea
+
+# OS固有
+.DS_Store
+Thumbs.db
+
+# テストファイル
+*_test.go
+
+# ビルド成果物
+main
+*.exe
