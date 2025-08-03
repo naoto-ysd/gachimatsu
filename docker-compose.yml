@@ -43,6 +43,22 @@ services:
     networks:
       - gachimatsu-network
 
+  # フロントエンド Next.js
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: gachimatsu-frontend
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - gachimatsu-network
+
 # データ永続化用のボリューム
 volumes:
   mysql_data:
