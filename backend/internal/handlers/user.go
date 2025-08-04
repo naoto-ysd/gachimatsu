@@ -45,8 +45,8 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// GetUser 特定のユーザーを取得
-func GetUser(w http.ResponseWriter, r *http.Request) {
+// GetUserByID 特定のユーザーを取得
+func GetUserByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
