@@ -14,12 +14,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # npmを使用して依存関係をインストール
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 # ビルド段階
 FROM base AS builder
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+COPY package*.json ./
+RUN npm ci --legacy-peer-deps
 COPY . .
 
 # Next.jsアプリケーションをビルド
