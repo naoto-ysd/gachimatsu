@@ -30,8 +30,8 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
-	}
 
+	}
 	err = database.DeleteUserByID(id)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -44,6 +44,8 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusNoContent)
 }
+
+
 
 // GetUserByID 特定のユーザーを取得
 func GetUserByID(w http.ResponseWriter, r *http.Request) {
@@ -66,4 +68,16 @@ func GetUserByID(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
+}
+
+// GetUserEmails ドメインごとにユーザーのメールアドレスを取得
+func GetUserEmails(w http.ResponseWriter, r *http.Request) {
+	emailMap, err := database.GetUserEmails()
+	if err != nil {
+		http.Error(w, "Failed to get user emails", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(emailMap)
 }
