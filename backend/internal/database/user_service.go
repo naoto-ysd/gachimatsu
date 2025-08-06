@@ -1,6 +1,7 @@
 package database
 
 import (
+	"strings"
 	"gachimatsu-backend/internal/models"
 )
 
@@ -89,12 +90,12 @@ func CreateUser(user *models.User) error {
 // Userをすべて取得してメールアドレスのドメインを取得する
 // GetUserEmails ドメインごとにユーザーのメールアドレスを取得
 func GetUserEmails() (map[string][]string, error) {
-	GetAllUsers, err := GetAllUsers()
+	users, err := GetAllUsers()
 	if err != nil {
 		return nil, err
 	}
 	emailMap := make(map[string][]string)
-	for _, user := range GetAllUsers {
+	for _, user := range users {
 		domain := user.Email[strings.LastIndex(user.Email, "@")+1:]
 		emailMap[domain] = append(emailMap[domain], user.Email)
 	}
