@@ -14,5 +14,7 @@ func SetupRoutes(router *mux.Router) {
 	
 	// ユーザー関連のエンドポイント
 	router.HandleFunc("/users", handlers.GetUsers).Methods("GET")
-	router.HandleFunc("/users/{id}", handlers.GetUser).Methods("GET")
+	router.HandleFunc("/users/{id}", handlers.GetUserByID).Methods("GET")
+	router.HandleFunc("/users/{id}", handlers.DeleteUser).Methods("DELETE")
+	router.HandleFunc("/users/emails", handlers.GetUserEmails).Methods("GET")
 } 
