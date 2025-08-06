@@ -1,6 +1,7 @@
 package database
 
 import (
+	"database/sql"
 	"strings"
 	"gachimatsu-backend/internal/models"
 )
@@ -84,6 +85,27 @@ func CreateUser(user *models.User) error {
 	}
 
 	user.ID = int(id)
+	return nil
+}
+
+// DeleteUserByID 特定のユーザーを削除
+func DeleteUserByID(id int) error {
+	query := `DELETE FROM users WHERE id = ?`
+	
+	result, err := DB.Exec(query, id)
+	if err != nil {
+		return err
+	}
+	
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	
+	if rowsAffected == 0 {
+		return sql.ErrNoRows
+	}
+	
 	return nil
 }
 
