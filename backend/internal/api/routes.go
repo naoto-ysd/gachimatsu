@@ -17,4 +17,7 @@ func SetupRoutes(router *mux.Router) {
 	router.HandleFunc("/users/emails", handlers.GetUserEmails).Methods("GET")
 	router.HandleFunc("/users/{id}", handlers.GetUserByID).Methods("GET")
 	router.HandleFunc("/users/{id}", handlers.DeleteUser).Methods("DELETE")
+	
+	// 統計情報のエンドポイント
+	router.HandleFunc("/stats", handlers.GetStats).Methods("GET")
 } 
