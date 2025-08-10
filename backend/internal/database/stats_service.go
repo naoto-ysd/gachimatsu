@@ -1,7 +1,6 @@
 package database
 
 import (
-	"database/sql"
 	"gachimatsu-backend/internal/models"
 )
 
